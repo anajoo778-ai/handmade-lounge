@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Handmade Lounge - كتالوج المنتجات الجلدية المصنوعة يدوياً</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body { font-family: 'Cairo', sans-serif; }
+    .leather-gradient {
+      background: radial-gradient(circle at top right, #1f1f26 0%, #121216 50%, #0a0a0c 100%);
+    }
+  </style>
+</head>
+<body class="bg-[#0a0a0d] text-[#f4f4f6] min-h-screen flex flex-col antialiased selection:bg-white selection:text-black">
+
+  <!-- الهيدر -->
+  <header class="sticky top-0 z-40 bg-[#121216]/95 backdrop-blur border-b border-[#25252e]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center font-black text-lg text-white">
+          HL
+        </div>
+        <div>
+          <h1 class="text-xl font-extrabold tracking-wide text-white">Handmade Lounge</h1>
+          <p class="text-xs text-gray-400">صناعة يدوية فاخرة من الجلد الطبيعي 100%</p>
+        </div>
+      </div>
+      <a href="/admin/" class="text-xs text-gray-400 hover:text-white border border-[#25252e] px-3 py-1.5 rounded-lg transition">
+        لوحة التحكم
+      </a>
+    </div>
+  </header>
+
+  <!-- بانر ترحيبي -->
+  <section class="leather-gradient border-b border-[#25252e] py-12 px-4 text-center">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-black text-white mb-3">فخامة الجلد الطبيعي.. حياكة يدوية تدوم العمر</h2>
+      <p class="text-gray-400 text-sm sm:text-base">تصفح كتالوج المنتجات واختر قطعتك المفضلة واطلبها مباشرة عبر واتساب أو فيسبوك ماسنجر</p>
+    </div>
+  </section>
+
+  <!-- فلتر الأقسام وعرض المنتجات -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- المنتجات تظهر هنا تلقائياً -->
+    </div>
+  </main>
+
+  <!-- الفوتر -->
+  <footer class="bg-[#121216] border-t border-[#25252e] py-6 text-center text-xs text-gray-500">
+    جميع الحقوق محفوظة © Handmade Lounge
+  </footer>
+
+  <script>
+    // ضع رقم الواتساب واسم صفحة فيسبوك هنا
+    const WHATSAPP_NUMBER = "201000000000"; 
+    const FB_PAGE_USERNAME = "handmadelounge";
+
+    async function loadProducts() {
+      try {
+        const response = await fetch('./products.json');
+        const data = await response.json();
+        const grid = document.getElementById('products-grid');
+        grid.innerHTML = '';
+
+        data.items.forEach(product => {
+          const waMessage = encodeURIComponent(`مرحباً Handmade Lounge، أرغب في طلب: ${product.title} - السعر: ${product.price} جنيه`);
+          const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
+          const fbLink = `https://m.me/${FB_PAGE_USERNAME}`;
+
+          grid.innerHTML += `
+            <div class="bg-[#16161c] border border-[#25252e] rounded-xl overflow-hidden shadow-lg flex flex-col justify-between">
+              <div class="relative w-full h-60 bg-[#0a0a0d] overflow-hidden">
+                <img src="${product.image}" alt="${product.title}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                <span class="absolute top-3 right-3 bg-black/75 backdrop-blur text-xs text-white px-2.5 py-1 rounded-full border border-white/10">
+                  ${product.category || 'جلد طبيعي'}
+                </span>
+              </div>
+              <div class="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 class="text-lg font-bold text-white mb-1">${product.title}</h3>
+                  <p class="text-sm text-gray-400 mb-4">${product.description}</p>
+                  <div class="text-xl font-extrabold text-white mb-4">${product.price} <span class="text-xs text-gray-400">جنيه</span></div>
+                </div>
+                <div class="space-y-2 pt-3 border-t border-[#25252e]">
+                  <p class="text-xs text-gray-400 text-center">اطلب الآن عبر:</p>
+                  <div class="grid grid-cols-2 gap-2">
+                    <a href="${waLink}" target="_blank" class="flex items-center justify-center gap-1.5 bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-bold py-2.5 px-3 rounded-lg transition">
+                      واتساب
+                    </a>
+                    <a href="${fbLink}" target="_blank" class="flex items-center justify-center gap-1.5 bg-[#0084FF] hover:bg-[#0073e6] text-white text-xs font-bold py-2.5 px-3 rounded-lg transition">
+                      ماسنجر
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+      } catch (error) {
+        console.error("خطأ في تحميل المنتجات:", error);
+      }
+    }
+
+    loadProducts();
+
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
