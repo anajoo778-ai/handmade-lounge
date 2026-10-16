@@ -1,0 +1,24 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+collections:
+  - name: "catalog"
+    label: "كتالوج المنتجات"
+    files:
+      - name: "products"
+        label: "قائمة المنتجات"
+        file: "products.json"
+        fields:
+          - label: "المنتجات"
+            name: "items"
+            widget: "list"
+            fields:
+              - {label: "اسم المنتج", name: "title", widget: "string"}
+              - {label: "السعر (بالجنيه)", name: "price", widget: "string"}
+              - {label: "القسم", name: "category", widget: "select", options: ["محافظ", "محافظ كروت", "حقائب", "إكسسوارات"]}
+              - {label: "وصف المنتج", name: "description", widget: "text"}
+              - {label: "صورة المنتج", name: "image", widget: "image"}
