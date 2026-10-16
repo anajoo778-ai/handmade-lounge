@@ -44,10 +44,10 @@
     </div>
   </section>
 
-  <!-- فلتر الأقسام وعرض المنتجات -->
+  <!-- عرض المنتجات -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
     <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- المنتجات تظهر هنا تلقائياً -->
+      <div class="text-center col-span-full py-10 text-gray-400">جاري تحميل المنتجات...</div>
     </div>
   </main>
 
@@ -57,16 +57,21 @@
   </footer>
 
   <script>
-    // ضع رقم الواتساب واسم صفحة فيسبوك هنا
     const WHATSAPP_NUMBER = "201000000000"; 
     const FB_PAGE_USERNAME = "handmadelounge";
 
     async function loadProducts() {
       try {
         const response = await fetch('./products.json');
+        if (!response.ok) throw new Error('فشل التحميل');
         const data = await response.json();
         const grid = document.getElementById('products-grid');
         grid.innerHTML = '';
+
+        if (!data.items || data.items.length === 0) {
+          grid.innerHTML = '<div class="text-center col-span-full py-10 text-gray-400">لا توجد منتجات مضافة حالياً. ارفع منتجاتك من لوحة التحكم!</div>';
+          return;
+        }
 
         data.items.forEach(product => {
           const waMessage = encodeURIComponent(`مرحباً Handmade Lounge، أرغب في طلب: ${product.title} - السعر: ${product.price} جنيه`);
@@ -103,7 +108,8 @@
           `;
         });
       } catch (error) {
-        console.error("خطأ في تحميل المنتجات:", error);
+        console.error("خطأ:", error);
+        document.getElementById('products-grid').innerHTML = '<div class="text-center col-span-full py-10 text-red-400">حدث خطأ في تحميل المنتجات. تأكد من وجود ملف products.json</div>';
       }
     }
 
